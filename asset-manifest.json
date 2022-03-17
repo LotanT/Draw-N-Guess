@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.2f31af21.css",
-    "main.js": "/static/js/main.b3641a9b.js",
-    "static/js/787.56cc63c8.chunk.js": "/static/js/787.56cc63c8.chunk.js",
-    "static/media/mainBtn.jpg": "/static/media/mainBtn.29f06adc6ef01c852383.jpg",
-    "static/media/appBackground.jpg": "/static/media/appBackground.c22d154919ce76258031.jpg",
-    "index.html": "/index.html",
-    "main.2f31af21.css.map": "/static/css/main.2f31af21.css.map",
-    "main.b3641a9b.js.map": "/static/js/main.b3641a9b.js.map",
-    "787.56cc63c8.chunk.js.map": "/static/js/787.56cc63c8.chunk.js.map"
+    "main.css": "/guess-draw/static/css/main.12560fa4.css",
+    "main.js": "/guess-draw/static/js/main.a48ec20c.js",
+    "static/js/787.56cc63c8.chunk.js": "/guess-draw/static/js/787.56cc63c8.chunk.js",
+    "static/media/mainBtn.jpg": "/guess-draw/static/media/mainBtn.29f06adc6ef01c852383.jpg",
+    "static/media/appBackground.jpg": "/guess-draw/static/media/appBackground.c22d154919ce76258031.jpg",
+    "index.html": "/guess-draw/index.html",
+    "main.12560fa4.css.map": "/guess-draw/static/css/main.12560fa4.css.map",
+    "main.a48ec20c.js.map": "/guess-draw/static/js/main.a48ec20c.js.map",
+    "787.56cc63c8.chunk.js.map": "/guess-draw/static/js/787.56cc63c8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2f31af21.css",
-    "static/js/main.b3641a9b.js"
+    "static/css/main.12560fa4.css",
+    "static/js/main.a48ec20c.js"
   ]
 }
