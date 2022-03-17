@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/guess-draw/static/css/main.12560fa4.css",
-    "main.js": "/guess-draw/static/js/main.a48ec20c.js",
-    "static/js/787.56cc63c8.chunk.js": "/guess-draw/static/js/787.56cc63c8.chunk.js",
-    "static/media/mainBtn.jpg": "/guess-draw/static/media/mainBtn.29f06adc6ef01c852383.jpg",
-    "static/media/appBackground.jpg": "/guess-draw/static/media/appBackground.c22d154919ce76258031.jpg",
-    "index.html": "/guess-draw/index.html",
-    "main.12560fa4.css.map": "/guess-draw/static/css/main.12560fa4.css.map",
-    "main.a48ec20c.js.map": "/guess-draw/static/js/main.a48ec20c.js.map",
-    "787.56cc63c8.chunk.js.map": "/guess-draw/static/js/787.56cc63c8.chunk.js.map"
+    "main.css": "/guessdraw/static/css/main.aa0a06f9.css",
+    "main.js": "/guessdraw/static/js/main.3c9293ff.js",
+    "static/js/787.56cc63c8.chunk.js": "/guessdraw/static/js/787.56cc63c8.chunk.js",
+    "static/media/mainBtn.jpg": "/guessdraw/static/media/mainBtn.29f06adc6ef01c852383.jpg",
+    "static/media/appBackground.jpg": "/guessdraw/static/media/appBackground.c22d154919ce76258031.jpg",
+    "index.html": "/guessdraw/index.html",
+    "main.aa0a06f9.css.map": "/guessdraw/static/css/main.aa0a06f9.css.map",
+    "main.3c9293ff.js.map": "/guessdraw/static/js/main.3c9293ff.js.map",
+    "787.56cc63c8.chunk.js.map": "/guessdraw/static/js/787.56cc63c8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.12560fa4.css",
-    "static/js/main.a48ec20c.js"
+    "static/css/main.aa0a06f9.css",
+    "static/js/main.3c9293ff.js"
   ]
 }
