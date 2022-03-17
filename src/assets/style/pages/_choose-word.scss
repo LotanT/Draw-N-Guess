@@ -1,0 +1,16 @@
+.choose-word {
+  .words {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 30%;
+    flex-direction: column;
+    gap: 20px;
+    >*{
+        min-width: 200px
+    }
+    p{
+        font-size: 0.6em;
+    }
+  }
+}

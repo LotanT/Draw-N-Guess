@@ -1,0 +1,24 @@
+/* helpers */
+
+.main-btn {
+  background-image: url('../imgs/mainBtn.jpg');
+  padding: 10px;
+  color: black;
+  font-size: 1.5em;
+  font-weight: 600;
+  box-shadow: 0 0 4px 1px grey;
+}
+
+.main-layout {
+  background-image: url('../imgs/appBackground.jpg');
+  height: 100vh;
+  padding: 20px;
+  position: relative;
+}
+
+.header {
+  position: relative;
+  top: 10%;
+  font-size: 2em;
+  font-weight: 900;
+}

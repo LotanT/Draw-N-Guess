@@ -1,0 +1,60 @@
+.playing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+
+  .display {
+    background-color: white;
+    width: 250px;
+    height: 250px;
+  }
+
+  .data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 50px;
+  }
+
+  .the-word {
+    font-weight: 600;
+    font-size: 1.3em;
+    background-color: #fff3dc9c;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  .guess-btn {
+    font-size: 1.5em;
+    padding: 5px;
+  }
+  .guessing {
+    input{
+      text-align: center;
+    }
+    button {
+      display: block;
+      margin: auto;
+      margin-top: 10px;
+    }
+  }
+  .msg{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 3.5em;
+      background-color: rgba(255, 255, 255, 0.644);
+      color: rgb(9, 0, 128);
+  }
+  .end-btn{
+    background-color: #ff2828;
+    font-size: 0.7em;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+}

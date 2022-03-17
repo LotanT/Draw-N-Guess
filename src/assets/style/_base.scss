@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: sans-serif;
+    font-weight: 600;
+}
+
+body {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+button {
+    border: unset;
+    background: unset;
+    padding: 0;
+    outline: none;
+    color: black;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+button:hover {
+    cursor: pointer;
+}
+
+input,
+textarea {
+    width: 200px;
+    outline: none;
+}
+
+input,
+select {
+    padding: 5px;
+    padding-left: none;
+}
+
+a,
+.router-link {
+    color: unset;
+    text-decoration: none;
+}
+
+header {
+    padding: 5px;
+}
