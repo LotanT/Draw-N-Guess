@@ -1,12 +1,22 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { gameService } from '../services/game.service';
+import { socketService } from '../services/socket.service';
+import { userService } from '../services/user.service';
 
 export function Welcome() {
   
+  
   useEffect(() => {
-    gameService.reset();
+    socketService.setup()
+    let user = userService.getLoggedinUser()
+    if(user) {
+      user.game = null
+      console.log('hi');
+      userService.updatUser(user)
+    }
   }, []);
+
+
 
   return (
     <section className="welcome main-layout">

@@ -1,8 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { gameService } from '../services/game.service';
+import { gamesService } from '../services/fullGame.service';
+import { useEffect } from 'react';
+import { userService } from '../services/user.service';
+import { socketService } from '../services/socket.service'
+
 let randomWords = require('random-words');
 
 export function ChooseWord() {
+  
   const word = randomWords({
     exactly: 3,
     wordsPerString: 1,
@@ -12,11 +17,21 @@ export function ChooseWord() {
         : word;
     },
   });
-  
+
+  useEffect(async () => {
+    socketService.setup()
+  }, [])
+
+
   let navigate = useNavigate();
 
   const setWord = async (word, points) => {
-    await gameService.setWord(word, points);
+    let user = await userService.getLoggedinUser()
+    let game = await gamesService.getGameById(user.game)
+    game.currentWord = word
+    game.currentWordPoints = points
+    game.isSessionOn = true
+    await gamesService.updateGame(game);
     navigate(`/playing/draw`);
   };
 

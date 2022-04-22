@@ -1,21 +1,21 @@
 import { useRef, useEffect, useState } from 'react';
-import { canvasService } from '../services/canvas.service';
 
-export function Canvas() {
+export function Canvas({game, updateGame}) {
 
-  const offsetLeft = useRef(null)
-  const offsetTop = useRef(null)
+  const offsetLeft = useRef(null);
+  const offsetTop = useRef(null);
 
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-
+  
+  let drawing = [];
 
   useEffect(() => {
     const canvas = canvasRef.current;
- 
-    offsetLeft.current = canvasRef.current.offsetLeft
-    offsetTop.current = canvasRef.current.offsetTop
+
+    offsetLeft.current = canvasRef.current.offsetLeft;
+    offsetTop.current = canvasRef.current.offsetTop;
 
     const context = canvas.getContext('2d');
     context.scale(1, 1);
@@ -23,9 +23,6 @@ export function Canvas() {
     context.strokeStyle = 'black';
     context.lineWidth = '3';
     contextRef.current = context;
-    return () => {
-      canvasService.reset();
-    };
   }, []);
 
   const startDrawing = (ev) => {
@@ -38,6 +35,11 @@ export function Canvas() {
   const finishDrawing = () => {
     contextRef.current.closePath();
     setIsDrawing(false);
+    if (drawing === [] || !drawing) return;
+    // game.drawing = drawing
+    // updateGame(game)
+    // canvasService.save(drawing)
+    updateDrawing()
   };
 
   const draw = (ev) => {
@@ -45,8 +47,16 @@ export function Canvas() {
     const pos = getPos(ev);
     contextRef.current.lineTo(pos.x, pos.y);
     contextRef.current.stroke();
-    canvasService.save(canvasRef.current.toDataURL());
+    drawing.push(pos);
+    // canvasService.save(canvasRef.current.toDataURL());
   };
+
+  const updateDrawing = async () => {
+    // const user = await userService.getLoggedinUser()
+    // const game = await gamesService.getGameById(user.game)
+    game.drawing = drawing
+    updateGame(game)
+  }
 
   const getPos = (ev) => {
     let offsetX;

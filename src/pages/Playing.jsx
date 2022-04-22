@@ -1,73 +1,66 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Canvas } from '../cmps/Canvas';
-import { canvasService } from '../services/canvas.service';
-import { gameService } from '../services/game.service';
+import { gamesService } from '../services/fullGame.service';
+
+import {socketService, SOCKET_EVENT_GAME_CHANGE} from '../services/socket.service';
+
+import { userService } from '../services/user.service';
+import { ShowDrawing } from '../cmps/ShowDrawing';
 
 export function Playing() {
-
   let navigate = useNavigate();
   const { rule } = useParams();
-  const [canvasImg, setCanvasImg] = useState('');
   const [gameData, setGameData] = useState({});
   const [guess, setGuess] = useState('');
   const [msg, setMsg] = useState('');
+  const [user, setUser] = useState({});
 
-  let intervalGuessId;
-  let intervalGuessEndId;
-  let intervalDrawId;
-
-  useEffect(() => {
-    if (rule === 'guess'){
-      intervalGuessId = setInterval(getCanvasImg, 50);
-      gameService.setIsGameOn(true);
-      intervalGuessEndId = setInterval(isGameOn, 3000);
-    } 
-    else {
-      gameService.setIsSessionOn(true);
-      intervalDrawId = setInterval(isSessionOn, 3000);
+  useEffect(async () => {
+    let currUser = await userService.getLoggedinUser();
+    let currGame = await gamesService.getGameById(currUser.game);
+    socketService.setup();
+    if (rule === 'guess') {
+      socketService.on(SOCKET_EVENT_GAME_CHANGE, () =>{
+        isGameOn(currUser)
+        getGameData(currUser)});
+    } else {
+      socketService.on(SOCKET_EVENT_GAME_CHANGE, () => isGameOn(currUser));
     }
-    getGameData();
-    return () => {
-      clearInterval(intervalGuessId);
-      clearInterval(intervalDrawId);
-      clearInterval(intervalGuessEndId);
-    };
+    setUser(currUser);
+    setGameData(currGame);
+    if(!currGame.isGameOn) navigate(`/`)
+    return ()=>{
+      socketService.off(SOCKET_EVENT_GAME_CHANGE)
+    }
   }, []);
 
-  const getCanvasImg = async () => {
-    const canvasImg = await canvasService.get();
-    setCanvasImg(canvasImg);
-  };
-
-  const getGameData = async () => {
-    const [game] = await gameService.quary();
+  const getGameData = async (currUser) => {
+    if (!currUser) currUser = user;
+    let game = await gamesService.getGameById(currUser.game);
     setGameData(game);
     return game;
+  };
+
+  const updateGame = async (gameToUpdate) => {
+    const updatedGame = await gamesService.updateGame(gameToUpdate);
+    setGameData(updatedGame);
   };
 
   const onChange = ({ target }) => {
     setGuess(target.value);
   };
 
-  const isSessionOn = async () => {
-    const game = await getGameData();
-    if (!game.isGameOn) navigate(`/`);
-    if (!game.isSessionOn) {
-      showMsg('Succeed!');
-      clearInterval(intervalDrawId);
-      setTimeout(() => navigate(`/wait`), 3000);
-    }
-  };
-
   const tryGuessing = async () => {
-    const game = await getGameData();
-    if (!game.isSessionOn) return;
-    if (game.word.toUpperCase() === guess.toUpperCase()) {
-      await gameService.setIsSessionOn(false);
-      await gameService.setScore();
+    if (!gameData.isSessionOn) return;
+    if (gameData.currentWord.toUpperCase() === guess.toUpperCase()) {
+      gameData.isSessionOn = false;
+      gameData.score += gameData.currentWordPoints;
+      gameData.currentWordPoints = 0;
+      gameData.drawing = [];
+      updateGame(gameData);
       showMsg('Bravo!');
-      setTimeout(() => navigate(`/wait`), 3000);
+      setTimeout(() => navigate(`/choosing`), 3000);
     } else {
       showMsg('Nope.. Try Again');
     }
@@ -78,16 +71,26 @@ export function Playing() {
     setTimeout(() => setMsg(''), 2500);
   };
 
-  const isGameOn = async () => {
-    const game = await getGameData()
-    if(!game.isGameOn) navigate(`/`);
-  }
+  const isGameOn = async (user) => {
+    const game = await getGameData(user);
+    if (!game.isGameOn) navigate(`/`);
+    if (!game.isSessionOn) {
+      showMsg('Succeed')
+      setTimeout(()=>{
+        navigate(`/choosing`);
+        navigate(`/playing/guess`);
+      },3000)
+      console.log('hi');
+    }
+  };
 
-  const endGame = () =>{
-    gameService.setIsGameOn(false)
-    navigate(`/`)
-  }
+  const endGame = async () => {
+    gameData.isGameOn = false
+    await gamesService.updateGame(gameData);
+    navigate(`/`);
+  };
 
+  if (!gameData) return <h1>loading...</h1>;
   return (
     <section className="playing main-layout">
       <h1>Game On!</h1>
@@ -96,14 +99,16 @@ export function Playing() {
       </div>
       {rule !== 'guess' && (
         <div className="word">
-          Your Word: <div className="the-word"> "{gameData.word}"</div>
+          Your Word: <div className="the-word"> "{gameData.currentWord}"</div>
         </div>
       )}
       <div>
         {rule !== 'guess' && <div>Draw here:</div>}
         <div className="display">
-          {rule !== 'guess' && <Canvas />}
-          {rule === 'guess' && <img src={canvasImg} />}
+          {rule !== 'guess' && (
+            <Canvas game={gameData} updateGame={updateGame} />
+          )}
+          {rule === 'guess' && <ShowDrawing drawing={gameData.drawing} />}
         </div>
       </div>
       {rule === 'guess' && (
@@ -119,7 +124,9 @@ export function Playing() {
           </button>
         </div>
       )}
-      <button className="end-btn" onClick={endGame}>End Game</button>
+      <button className="end-btn" onClick={endGame}>
+        End Game
+      </button>
       <section className="msg">{msg}</section>
     </section>
   );
