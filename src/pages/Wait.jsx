@@ -18,14 +18,12 @@ export function Wait() {
     user.game = game._id;
     await userService.updatUser(user);
     checkIfTwoPlayers();
-    return () => {
-      socketService.off(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
-    };
   }, []);
 
   const checkIfTwoPlayers = async () => {
     let updateGame = await gamesService.getGameById(game._id);
     if (updateGame.player1 && updateGame.player2) {
+      socketService.off(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
       if (updateGame.player1 === user._id) navigate(`/choosing`);
       else navigate(`/playing/guess`);
     }
@@ -33,6 +31,7 @@ export function Wait() {
 
   const goBack = () => {
     gamesService.removeGame(game._id)
+    socketService.off(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
     navigate(`/`);
   };
 

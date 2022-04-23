@@ -29,7 +29,7 @@ export function Playing() {
     }
     setUser(currUser);
     setGameData(currGame);
-    if(!currGame.isGameOn) navigate(`/`)
+    if(!currGame?.isGameOn) navigate(`/`)
     return ()=>{
       socketService.off(SOCKET_EVENT_GAME_CHANGE)
     }
@@ -73,20 +73,20 @@ export function Playing() {
 
   const isGameOn = async (user) => {
     const game = await getGameData(user);
-    if (!game.isGameOn) navigate(`/`);
+    console.log(game);
+    if (!game?.isGameOn) navigate(`/`);
     if (!game.isSessionOn) {
       showMsg('Succeed')
       setTimeout(()=>{
         navigate(`/choosing`);
         navigate(`/playing/guess`);
       },3000)
-      console.log('hi');
     }
   };
 
   const endGame = async () => {
     gameData.isGameOn = false
-    await gamesService.updateGame(gameData);
+    await gamesService.removeGame(gameData._id);
     navigate(`/`);
   };
 

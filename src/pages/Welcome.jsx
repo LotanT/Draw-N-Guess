@@ -11,7 +11,6 @@ export function Welcome() {
     let user = userService.getLoggedinUser()
     if(user) {
       user.game = null
-      console.log('hi');
       userService.updatUser(user)
     }
   }, []);

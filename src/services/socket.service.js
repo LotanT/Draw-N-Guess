@@ -1,12 +1,7 @@
 import io from 'socket.io-client'
 
-export const SOCKET_EMIT_USER_WATCH = 'room';
-export const SOCKET_EVENT_USER_UPDATED = 'user-left';
-export const SOCKET_EVENT_REVIEW_ADDED = '-added';
-export const SOCKET_EVENT_REVIEW_ABOUT_YOU = 'review-about-you';
-
-
 export const SOCKET_EVENT_GAME_CHANGE = 'game-change';
+export const SOCKET_EVENT_TWO_PLAYERS = 'game-change';
 
 
 const baseUrl = (process.env.NODE_ENV === 'production')? '' : '//localhost:3030'
@@ -72,19 +67,3 @@ function createDummySocketService() {
   window.listenersMap = listenersMap;
   return socketService
 }
-
-
-// Basic Tests
-function cb(x) {console.log('Socket Test - Expected Puk, Actual:', x)}
-// socketService.on('baba', cb)
-// socketService.on('baba', cb)
-// socketService.on('baba', cb)
-// socketService.on('mama', cb)
-// socketService.emit('baba', 'Puk')
-// socketService.off('baba', cb)
-
-
-socketService.on(SOCKET_EVENT_REVIEW_ABOUT_YOU, review => {
-  console.log('Review about me!', review);
-})
-

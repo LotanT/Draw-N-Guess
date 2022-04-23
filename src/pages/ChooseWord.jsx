@@ -7,7 +7,7 @@ import { socketService } from '../services/socket.service'
 let randomWords = require('random-words');
 
 export function ChooseWord() {
-  
+
   const word = randomWords({
     exactly: 3,
     wordsPerString: 1,
@@ -28,6 +28,7 @@ export function ChooseWord() {
   const setWord = async (word, points) => {
     let user = await userService.getLoggedinUser()
     let game = await gamesService.getGameById(user.game)
+    if(!game) navigate('/')
     game.currentWord = word
     game.currentWordPoints = points
     game.isSessionOn = true

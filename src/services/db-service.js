@@ -37,13 +37,11 @@ async function post(collectionName, item) {
     let collection = await query(collectionName);
     item[ID_FIELD] = utils.getRandomId();
     collection.push(item);
-
     utils.storeToStorage(collectionName, collection);
     return Promise.resolve(item);
 }
 
 async function put(collectionName, item) {
-    console.log(collectionName, item);
     let collection = await query(collectionName);
     let idx = collection.findIndex(curr => curr[ID_FIELD] === item[ID_FIELD]);
     if (idx === -1) throw new Error('something went wrong');
