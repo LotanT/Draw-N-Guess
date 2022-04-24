@@ -6,7 +6,7 @@ module.exports = {
     connect
 }
 
-const dbName = 'gameDB'
+const dbName = 'guessdrawDB'
 const dbURL = 'mongodb://127.0.0.1:27017'
 
 var dbConn = null
@@ -35,7 +35,3 @@ async function connect() {
         throw err
     }
 }
-
-
-
-
