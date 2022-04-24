@@ -6,7 +6,8 @@ module.exports = {
     query,
     getById,
     add,
-    update
+    update,
+    remove
 }
 
 async function query(filterBy = {}) {
@@ -47,12 +48,25 @@ async function add(game) {
 
 async function update(game) {
     try {
-        game._id = ObjectId(game._id)
-        const collection = await dbService.getCollection('game')
-        await collection.updateOne({ _id: game._id }, { $set: game })
+        const prevId = game._id
+        const id = ObjectId(game._id)
+        delete game._id
+        const collection = await dbService.getCollection('games')
+        await collection.findOneAndUpdate({ _id: id}, { $set: { ...game } })
+        game._id = prevId
         return game;
     } catch (err) {
         logger.error(`cannot update game ${game._id}`, err)
+        throw err
+    }
+}
+
+async function remove(gameId) {
+    try {
+        const collection = await dbService.getCollection('games')
+        await collection.deleteOne({ _id: ObjectId(gameId) })
+    } catch (err) {
+        logger.error(`cannot remove game ${gameId}`, err)
         throw err
     }
 }

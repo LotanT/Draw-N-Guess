@@ -6,6 +6,7 @@ module.exports = {
   getGame,
   addGame,
   updateGame,
+  deleteGame
 };
 
 async function getGames(req, res) {
@@ -48,4 +49,14 @@ async function updateGame(req, res) {
     logger.error('Failed to update game', err);
     res.status(500).send({ err: 'Failed to update game' });
   }
+}
+
+async function deleteGame(req, res) {
+    try {
+        await gameService.remove(req.params.id)
+        res.send({ msg: 'Deleted successfully' })
+    } catch (err) {
+        logger.error('Failed to delete game', err)
+        res.status(500).send({ err: 'Failed to delete game' })
+    }
 }
