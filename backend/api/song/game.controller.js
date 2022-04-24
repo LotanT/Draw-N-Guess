@@ -3,7 +3,8 @@ const logger = require('../../services/logger.service')
 
 module.exports = {
     getGames,
-    getGame
+    getGame,
+    addGame
 }
 
 async function getGames(req, res) {
@@ -25,3 +26,14 @@ async function getGame(req, res) {
         res.status(500).send({ err: 'Failed to get game' })
     }
 }
+
+async function addGame(req, res) {
+    try {
+      let game = req.body;
+      await gameService.add(game)
+      res.json(game)
+    } catch (err) {
+      logger.error('Failed to add game', err)
+      res.status(500).send({ err: 'Failed to add game' })
+    }
+  }
