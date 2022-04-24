@@ -6,7 +6,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3030;
 
-const gameRoutes = require('./api/game/game.routes')
+const gameRoutes = require('./api/song/game.routes')
 app.use('/api', gameRoutes);
 
 app.listen(port, () => {
