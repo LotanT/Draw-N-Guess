@@ -6,7 +6,7 @@ module.exports = {
     connect
 }
 
-const dbName = 'guessdrawDB'
+const dbName = 'gameDB'
 const dbURL = 'mongodb://127.0.0.1:27017'
 
 var dbConn = null

@@ -3,6 +3,7 @@ const logger = require('../../services/logger.service')
 
 module.exports = {
     query,
+    getById
 }
 
 async function query(filterBy = {}) {
@@ -13,6 +14,17 @@ async function query(filterBy = {}) {
         return games
     } catch (err) {
         logger.error('cannot find games', err)
+        throw err
+    }
+}
+
+async function getById(gameId) {
+    try {
+        const collection = await dbService.getCollection('games')
+        const game = await collection.findOne({ _id: ObjectId(gameId) })
+        return game
+    } catch (err) {
+        logger.error(`while finding game ${gameId}`, err)
         throw err
     }
 }
