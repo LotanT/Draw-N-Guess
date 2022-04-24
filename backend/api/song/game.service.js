@@ -5,7 +5,8 @@ const ObjectId = require('mongodb').ObjectId
 module.exports = {
     query,
     getById,
-    add
+    add,
+    update
 }
 
 async function query(filterBy = {}) {
@@ -40,6 +41,18 @@ async function add(game) {
         return addedSong
     } catch (err) {
         logger.error('cannot insert game', err)
+        throw err
+    }
+}
+
+async function update(game) {
+    try {
+        game._id = ObjectId(game._id)
+        const collection = await dbService.getCollection('game')
+        await collection.updateOne({ _id: game._id }, { $set: game })
+        return game;
+    } catch (err) {
+        logger.error(`cannot update game ${game._id}`, err)
         throw err
     }
 }
