@@ -5,13 +5,13 @@ export const SOCKET_EVENT_TWO_PLAYERS = 'game-change';
 
 
 const baseUrl = (process.env.NODE_ENV === 'production')? '' : '//localhost:3030'
-// export const socketService = createSocketService()
-export const socketService = createDummySocketService()
+export const socketService = createSocketService()
+// export const socketService = createDummySocketService()
 
 window.socketService = socketService
 
 // var socketIsReady = false;
-// socketService.setup()
+socketService.setup()
 
 
 function createSocketService() {
