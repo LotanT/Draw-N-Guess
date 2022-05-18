@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
+app.use(express.json())
 const http = require('http').createServer(app);
 
 
@@ -21,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(cors(corsOptions));
 }
 
-const gameRoutes = require('./api/song/game.routes');
+const gameRoutes = require('./api/game/game.routes');
 const { connectSockets } = require('./services/socket.service');
 
 app.use('/api/game', gameRoutes);

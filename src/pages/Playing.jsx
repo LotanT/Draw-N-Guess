@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Canvas } from '../cmps/Canvas';
 import { gamesService } from '../services/fullGame.service';
 
-import {socketService, SOCKET_EVENT_GAME_CHANGE} from '../services/socket.service';
+import { socketService, SOCKET_EVENT_GAME_CHANGE, SOCKET_EMIT_CHANGE_GMAE } from '../services/socket.service';
 
 import { userService } from '../services/user.service';
 import { ShowDrawing } from '../cmps/ShowDrawing';
@@ -16,34 +16,28 @@ export function Playing() {
   const [msg, setMsg] = useState('');
   const [user, setUser] = useState({});
 
-  useEffect(async () => {
-    let currUser = await userService.getLoggedinUser();
-    let currGame = await gamesService.getGameById(currUser.game);
-    socketService.setup();
-    if (rule === 'guess') {
-      socketService.on(SOCKET_EVENT_GAME_CHANGE, () =>{
-        isGameOn(currUser)
-        getGameData(currUser)});
-    } else {
-      socketService.on(SOCKET_EVENT_GAME_CHANGE, () => isGameOn(currUser));
-    }
-    setUser(currUser);
-    setGameData(currGame);
-    if(!currGame?.isGameOn) navigate(`/`)
-    return ()=>{
+  useEffect(() => {
+    initPlay()
+    socketService.on(SOCKET_EVENT_GAME_CHANGE, (game) => {
+      isGameOn(game)
+      setGameData(game)
+    });
+    return () => {
       socketService.off(SOCKET_EVENT_GAME_CHANGE)
     }
   }, []);
 
-  const getGameData = async (currUser) => {
-    if (!currUser) currUser = user;
-    let game = await gamesService.getGameById(currUser.game);
-    setGameData(game);
-    return game;
-  };
+  const initPlay = async () => {
+    let currUser = await userService.getLoggedinUser();
+    let currGame = await gamesService.getGameById(currUser.game);
+    setUser(currUser);
+    setGameData(currGame);
+    if (!currGame?.isGameOn) navigate(`/`)
+  }
 
   const updateGame = async (gameToUpdate) => {
     const updatedGame = await gamesService.updateGame(gameToUpdate);
+    socketService.emit(SOCKET_EMIT_CHANGE_GMAE, gameToUpdate)
     setGameData(updatedGame);
   };
 
@@ -71,21 +65,19 @@ export function Playing() {
     setTimeout(() => setMsg(''), 2500);
   };
 
-  const isGameOn = async (user) => {
-    const game = await getGameData(user);
-    console.log(game);
+  const isGameOn = (game) => {
     if (!game?.isGameOn) navigate(`/`);
     if (!game.isSessionOn) {
       showMsg('Succeed')
-      setTimeout(()=>{
+      setTimeout(() => {
         navigate(`/choosing`);
         navigate(`/playing/guess`);
-      },3000)
+      }, 3000)
     }
   };
 
   const endGame = async () => {
-    gameData.isGameOn = false
+    socketService.emit(SOCKET_EMIT_CHANGE_GMAE, null)
     await gamesService.removeGame(gameData._id);
     navigate(`/`);
   };

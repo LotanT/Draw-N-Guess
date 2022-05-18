@@ -1,16 +1,15 @@
 import io from 'socket.io-client'
 
-export const SOCKET_EVENT_GAME_CHANGE = 'game-change';
+export const SOCKET_EVENT_GAME_CHANGE = 'game-changed';
+export const SOCKET_EMIT_CHANGE_GMAE = 'update-game'
 export const SOCKET_EVENT_TWO_PLAYERS = 'two-player';
 export const SOCKET_EMIT_JOIN_GAME = 'join-game'
+export const SOCKET_EVENT_GET_DRAWING = 'get-drawing';
+export const SOCKET_EMIT_DRAWING = 'drawing'
 
 const baseUrl = (process.env.NODE_ENV === 'production')? '' : 'http://localhost:3030'
 export const socketService = createSocketService()
-// export const socketService = createDummySocketService()
 
-// window.socketService = socketService
-
-// var socketIsReady = false;
 socketService.setup()
 
 
@@ -35,35 +34,5 @@ function createSocketService() {
       socket = null
     }
   }
-  return socketService
-}
-
-// eslint-disable-next-line
-function createDummySocketService() {
-  var listenersMap = {}
-  const socketService = {
-    listenersMap,
-    setup() {
-      listenersMap = {}
-    },
-    terminate() {
-      this.setup()
-    },
-    on(eventName, cb) {
-      listenersMap[eventName] = [...(listenersMap[eventName]) || [], cb]
-    },
-    off(eventName, cb) {
-      if (!listenersMap[eventName]) return
-      if (!cb) delete listenersMap[eventName]
-      else listenersMap[eventName] = listenersMap[eventName].filter(l => l !== cb)
-    },
-    emit(eventName, data) {
-      if (!listenersMap[eventName]) return
-      listenersMap[eventName].forEach(listener => {
-        listener(data)
-      })
-    }
-  }
-  window.listenersMap = listenersMap;
   return socketService
 }

@@ -18,9 +18,9 @@ export function ChooseWord() {
     },
   });
 
-  useEffect(async () => {
-    socketService.setup()
-  }, [])
+  // useEffect(async () => {
+  //   socketService.setup()
+  // }, [])
 
 
   let navigate = useNavigate();

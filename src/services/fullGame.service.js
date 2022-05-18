@@ -28,6 +28,7 @@ async function getGame(user) {
   if (!game) {
     game = openNewGame();
     game.player1 = user._id;
+    console.log(game);
     return await httpService.post('game',game);
   } else {
     if (!game.player1){
@@ -41,7 +42,7 @@ async function getGame(user) {
 }
 
 async function getGameById(id) {
-  return await httpService.get('game',id);
+  return await httpService.get(`game/${id}`);
 }
 
 async function updateGame(game) {

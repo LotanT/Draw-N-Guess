@@ -36,8 +36,8 @@ async function getById(gameId) {
 async function add(game) {
     try {
         const collection = await dbService.getCollection('games')
-        const addedSong = await collection.insertOne(game)
-        return addedSong
+        const addedGame = await collection.insertOne(game)
+        return addedGame
     } catch (err) {
         logger.error('cannot insert game', err)
         throw err

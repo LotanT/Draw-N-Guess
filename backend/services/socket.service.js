@@ -1,4 +1,5 @@
-const logger = require('./logger.service');
+// const logger = require('./logger.service');
+const gameService = require('..//api/game/game.service')
 
 var gIo = null
 
@@ -10,8 +11,9 @@ function connectSockets(http) {
     })
     gIo.on('connection', socket => {
         console.log('New socket', socket.id)
-        socket.on('disconnect', socket => {
-            console.log('Someone disconnected')
+        socket.on('disconnect', () => {
+            socket.to(socket.myTopic).emit('game-changed', null)
+            gameService.remove(socket.myTopic)
         })
         socket.on('join-game', (game, topic) => {
             if (socket.myTopic === topic) return;
@@ -22,17 +24,20 @@ function connectSockets(http) {
             socket.myTopic = topic
             socket.to(topic).emit('two-player', game)
         })
+        socket.on('update-game', (game)=>{
+            socket.to(socket.myTopic).emit('game-changed', game)
+        })
     })
 }
 
 
 
-function emitTo({ type, data, label }) {
-    if (label) gIo.to(label).emit(type, data)
-    else gIo.emit(type, data)
-}
+// function emitTo({ type, data, label }) {
+//     if (label) gIo.to(label).emit(type, data)
+//     else gIo.emit(type, data)
+// }
 
 module.exports = {
     connectSockets,
-    emitTo
+    // emitTo
 }
