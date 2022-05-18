@@ -1,14 +1,14 @@
 import io from 'socket.io-client'
 
 export const SOCKET_EVENT_GAME_CHANGE = 'game-change';
-export const SOCKET_EVENT_TWO_PLAYERS = 'game-change';
+export const SOCKET_EVENT_TWO_PLAYERS = 'two-player';
+export const SOCKET_EMIT_JOIN_GAME = 'join-game'
 
-
-const baseUrl = (process.env.NODE_ENV === 'production')? '' : '//localhost:3030'
+const baseUrl = (process.env.NODE_ENV === 'production')? '' : 'http://localhost:3030'
 export const socketService = createSocketService()
 // export const socketService = createDummySocketService()
 
-window.socketService = socketService
+// window.socketService = socketService
 
 // var socketIsReady = false;
 socketService.setup()
@@ -17,7 +17,7 @@ socketService.setup()
 function createSocketService() {
   var socket = null;
   const socketService = {
-    setup() {
+    setup() { 
       socket = io(baseUrl)
     },
     on(eventName, cb) {
@@ -28,8 +28,8 @@ function createSocketService() {
       if (!cb) socket.removeAllListeners(eventName)
       else socket.off(eventName, cb)
     },
-    emit(eventName, data) {
-      socket.emit(eventName, data)
+    emit(eventName, data, topic = null) {
+      socket.emit(eventName, data, topic)
     },
     terminate() {
       socket = null

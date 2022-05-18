@@ -13,13 +13,14 @@ function connectSockets(http) {
         socket.on('disconnect', socket => {
             console.log('Someone disconnected')
         })
-        socket.on('join game', topic => {
+        socket.on('join-game', (game, topic) => {
             if (socket.myTopic === topic) return;
             if (socket.myTopic) {
                 socket.leave(socket.myTopic)
             }
             socket.join(topic)
             socket.myTopic = topic
+            socket.to(topic).emit('two-player', game)
         })
     })
 }

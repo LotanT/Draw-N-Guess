@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userService } from '../services/user.service';
 import { gamesService } from '../services/fullGame.service';
-import {socketService, SOCKET_EVENT_GAME_CHANGE} from '../services/socket.service';
+import {socketService, SOCKET_EMIT_JOIN_GAME, SOCKET_EVENT_TWO_PLAYERS} from '../services/socket.service';
 
 export function Wait() {
   let navigate = useNavigate();
@@ -14,16 +14,17 @@ export function Wait() {
     user = await userService.getLoggedinUser();
     if (!user) user = await userService.setUser();
     game = await gamesService.getGame(user);
-    socketService.on(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
     user.game = game._id;
+    socketService.emit(SOCKET_EMIT_JOIN_GAME, game, game._id);
+    socketService.on(SOCKET_EVENT_TWO_PLAYERS, game =>{
+      checkIfTwoPlayers(game)
+    })
     await userService.updatUser(user);
-    checkIfTwoPlayers();
+    checkIfTwoPlayers(game);
   }, []);
 
-  const checkIfTwoPlayers = async () => {
-    let updateGame = await gamesService.getGameById(game._id);
+  const checkIfTwoPlayers = (updateGame) => {
     if (updateGame.player1 && updateGame.player2) {
-      socketService.off(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
       if (updateGame.player1 === user._id) navigate(`/choosing`);
       else navigate(`/playing/guess`);
     }
@@ -31,7 +32,6 @@ export function Wait() {
 
   const goBack = () => {
     gamesService.removeGame(game._id)
-    socketService.off(SOCKET_EVENT_GAME_CHANGE, checkIfTwoPlayers);
     navigate(`/`);
   };
 

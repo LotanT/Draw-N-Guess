@@ -11,9 +11,7 @@ module.exports = {
 }
 
 async function query(filterBy = {}) {
-    console.log(filterBy);
     const criteria = _buildCriteria(filterBy)
-    console.log(criteria);
     try {
         const collection = await dbService.getCollection('games')
         let games = await collection.find(criteria).toArray()
@@ -73,7 +71,7 @@ async function remove(gameId) {
 
 function _buildCriteria(filterBy) {
     const criteria = {}
-    if (filterBy !== {}) {
+    if (filterBy.player1 || filterBy.player2) {
         criteria.$or = [
             {
                 player1: filterBy.player1

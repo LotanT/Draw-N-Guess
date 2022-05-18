@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { socketService } from '../services/socket.service';
 import { userService } from '../services/user.service';
 
 export function Welcome() {
   
   
   useEffect(() => {
-    socketService.setup()
     let user = userService.getLoggedinUser()
     if(user) {
       user.game = null
