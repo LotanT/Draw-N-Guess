@@ -23,12 +23,10 @@ function openNewGame() {
 
 async function getGame(user) {
   const games = await httpService.get('game');
-  console.log(games);
   let game = games.filter((game) => !game.player1 || !game.player2)[0];
   if (!game) {
     game = openNewGame();
     game.player1 = user._id;
-    console.log(game);
     return await httpService.post('game',game);
   } else {
     if (!game.player1){

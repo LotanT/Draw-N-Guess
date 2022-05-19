@@ -14,7 +14,6 @@ export function Playing() {
   const [gameData, setGameData] = useState({});
   const [guess, setGuess] = useState('');
   const [msg, setMsg] = useState('');
-  const [user, setUser] = useState({});
 
   useEffect(() => {
     initPlay()
@@ -30,7 +29,6 @@ export function Playing() {
   const initPlay = async () => {
     let currUser = await userService.getLoggedinUser();
     let currGame = await gamesService.getGameById(currUser.game);
-    setUser(currUser);
     setGameData(currGame);
     if (!currGame?.isGameOn) navigate(`/`)
   }
@@ -66,7 +64,10 @@ export function Playing() {
   };
 
   const isGameOn = (game) => {
-    if (!game?.isGameOn) navigate(`/`);
+    if (!game){
+      navigate(`/`);
+      return
+    } 
     if (!game.isSessionOn) {
       showMsg('Succeed')
       setTimeout(() => {

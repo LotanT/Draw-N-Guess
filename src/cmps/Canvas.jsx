@@ -36,9 +36,6 @@ export function Canvas({game, updateGame}) {
     contextRef.current.closePath();
     setIsDrawing(false);
     if (drawing === [] || !drawing) return;
-    // game.drawing = drawing
-    // updateGame(game)
-    // canvasService.save(drawing)
     updateDrawing()
   };
 
@@ -48,12 +45,9 @@ export function Canvas({game, updateGame}) {
     contextRef.current.lineTo(pos.x, pos.y);
     contextRef.current.stroke();
     drawing.push(pos);
-    // canvasService.save(canvasRef.current.toDataURL());
   };
 
   const updateDrawing = async () => {
-    // const user = await userService.getLoggedinUser()
-    // const game = await gamesService.getGameById(user.game)
     game.drawing = drawing
     updateGame(game)
   }

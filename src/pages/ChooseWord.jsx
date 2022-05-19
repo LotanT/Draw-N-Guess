@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { gamesService } from '../services/fullGame.service';
-import { useEffect } from 'react';
 import { userService } from '../services/user.service';
-import { socketService } from '../services/socket.service'
 
 let randomWords = require('random-words');
 
@@ -17,11 +15,6 @@ export function ChooseWord() {
         : word;
     },
   });
-
-  // useEffect(async () => {
-  //   socketService.setup()
-  // }, [])
-
 
   let navigate = useNavigate();
 

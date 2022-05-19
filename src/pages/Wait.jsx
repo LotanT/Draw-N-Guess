@@ -10,7 +10,14 @@ export function Wait() {
   let user;
   let game;
 
-  useEffect(async () => {
+  useEffect(() => {
+    init()
+    return () => {
+      socketService.off(SOCKET_EVENT_TWO_PLAYERS)
+    }
+  }, []);
+
+  const init = async () => {
     user = await userService.getLoggedinUser();
     if (!user) user = await userService.setUser();
     game = await gamesService.getGame(user);
@@ -21,7 +28,7 @@ export function Wait() {
     })
     await userService.updatUser(user);
     checkIfTwoPlayers(game);
-  }, []);
+  }
 
   const checkIfTwoPlayers = (updateGame) => {
     if (updateGame.player1 && updateGame.player2) {

@@ -1,4 +1,3 @@
-// const logger = require('./logger.service');
 const gameService = require('..//api/game/game.service')
 
 var gIo = null
@@ -30,14 +29,6 @@ function connectSockets(http) {
     })
 }
 
-
-
-// function emitTo({ type, data, label }) {
-//     if (label) gIo.to(label).emit(type, data)
-//     else gIo.emit(type, data)
-// }
-
 module.exports = {
-    connectSockets,
-    // emitTo
+    connectSockets
 }
